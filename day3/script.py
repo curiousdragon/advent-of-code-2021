@@ -58,22 +58,17 @@ def diagnostics2(data):
         # switch = -1 = CO2: least common bit is max
         for switch in switches:
             # Compile counts for this bit
-            # print(switch)
             for bnum in subset[switch]:
-                count[switch][bnum[i]] += 1
+                count[switch][bnum[i]] += switch
             if count[switch]["0"] == count[switch]["1"]:
-                # print(f"equal, choose:", max(switch, 0))
                 subset[switch] = [n for n in subset[switch]
                         if n[i] == str(max(switch, 0))]
             elif count[switch]["0"] > count[switch]["1"]:
-                # print(f"0 greater, choose:", max(0, 0 - switch))
                 subset[switch] = [n for n in subset[switch]
-                        if n[i] == str(max(0, 0 - switch))]
+                        if n[i] == str(0)]
             else:
-                # print(f"1 greater, choose:", min(1, switch + 1))
                 subset[switch] = [n for n in subset[switch]
-                        if n[i] == str(min(1, switch + 1))]
-        # print(subset)
+                        if n[i] == str(1)]
     return [int(subset[1][0], base=2), int(subset[-1][0], base=2)]
 
 # rates = diagnostics(data)

@@ -16,7 +16,7 @@ fn calculate_coords(lines: Lines<>) -> i32 {
     // Return a list whose first element is the horizontal position,
     // and whose second element is the depth.
     // 
-    // Input: vector of vectors of integers
+    // Input: iterator over input lines
     // Output: vector with 2 integer elements
     //
     // Example:

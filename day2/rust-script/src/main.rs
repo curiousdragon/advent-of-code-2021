@@ -30,8 +30,9 @@ fn calculate_coords(lines: Lines<>) -> i32 {
     // [15, 10]
     // ```
 
-    // Initialize the coordinates
-    let mut vec = vec![0, 0];
+    // Initialize the coordinates:
+    // [horizontal position, depth, aim]
+    let mut vec = vec![0, 0, 0];
     // Go through each line of directions
     for line in lines {
         // Split the line into direction and value
@@ -43,10 +44,11 @@ fn calculate_coords(lines: Lines<>) -> i32 {
         // Different behavior depending on direction
         if direction == "forward" {
             vec[0] += value;
+            vec[1] += vec[2] * value;
         } else if direction == "down" {
-            vec[1] += value;
+            vec[2] += value;
         } else if direction == "up" {
-            vec[1] -= value;
+            vec[2] -= value;
         } else {
             // This direction does not exist
             println!("Error: invalid direction: {}", direction);

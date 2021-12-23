@@ -12,19 +12,20 @@ with open(path, newline='') as f:
         split_line = line[0].split()
         data.append([split_line[0], int(split_line[1])])
 
-# Solution: part 1
+# Solution
 def direction(cmd):
     """COORDS: [horizontal position, depth]."""
     def forward(coords, x):
         coords[0] += x
+        coords[1] += coords[2] * x
         return coords
 
     def down(coords, x):
-        coords[1] += x
+        coords[2] += x
         return coords
 
     def up(coords, x):
-        coords[1] -= x
+        coords[2] -= x
         return coords
 
     commands = {
@@ -47,9 +48,9 @@ def calculate_coords(data):
     >>> data = [["forward", 5], ["down", 5], ["forward", 8],
     ...     ["up", 3], ["down", 8], ["forward", 2]]
     >>> calculate_coords(data)
-    [15, 10]
+    [15, 60, 10]
     """
-    coords = [0, 0]
+    coords = [0, 0, 0]
     return [direction(line[0])(coords, line[1]) for line in data][-1]
 
 coords = calculate_coords(data)

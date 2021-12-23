@@ -30,6 +30,34 @@ fn count_increase(vec: Vec<i32>) -> i32 {
     count
 }
 
+fn count_increase_window(vec: Vec<i32>, window: i32) -> i32 {
+    // Return the number of times a WINDOW-sized window of elements of DATA
+    // increases from the previous window.
+    //
+    // Input: slice of integers (i32), integer size
+    // Output: integer i32)
+    //
+    // Example:
+    // ```
+    // data = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
+    // count_increase_window(data, 3) // expected: 5
+    // ```
+
+    let mut count = 0;
+    for i in 0..vec.len()-(window as usize) {
+        let mut sum1 = 0;
+        let mut sum2 = 0;
+        for k in 0..window {
+            sum1 += vec[i+(k as usize)];
+            sum2 += vec[i+1+(k as usize)];
+        }
+        if sum2 > sum1 {
+            count += 1;
+        }
+    }
+    count
+}
+
 fn main() {
     // Create a path to the input file
     let path = Path::new("input.txt");
@@ -54,8 +82,12 @@ fn main() {
         .collect();
     println!("{}", vec[0]);
 
-    // Call the function
-    let output_data : i32 = count_increase(vec);
+    // Call the function - part 1
+    // let output_data : i32 = count_increase(vec);
+    // let output : String = output_data.to_string();
+
+    // Call the function - part 2
+    let output_data : i32 = count_increase_window(vec, 3);
     let output : String = output_data.to_string();
 
     // Create a path to the output file

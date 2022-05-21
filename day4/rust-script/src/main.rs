@@ -39,10 +39,18 @@ fn main() -> Result<()> {
         star.push(vec![0; board.last_mut().unwrap().len()]);
     }
 
-    let mut bingo_scores = vec![];
+    // Boolean flag to determine which mode we're running the code in.
+    let max_flag = false;
 
+    let mut winning_boards = vec![];
+    let mut bingo_scores = vec![];
     for choice in chosen {
         for (board, star) in boards.iter().zip(&mut starred) {
+            if winning_boards.contains(&board) {
+                // If this board has won a bingo in a previous round, skip it.
+                continue;
+            }
+
             for (row, star_row) in board.iter().zip(star.iter_mut()) {
                 for (number, star_value) in row.iter().zip(star_row) {
                     if *number == choice {
@@ -84,20 +92,29 @@ fn main() -> Result<()> {
                     }
                 }
                 bingo_scores.push(choice * score);
+                winning_boards.push(board);
             }
         }
-        if !bingo_scores.is_empty() {
+        if max_flag && !bingo_scores.is_empty() {
             // If at least one board has won bingo on this round, stop immediately
             break;
         }
     }
-    let max_score = bingo_scores
-        .iter()
-        .max()
-        .context("No board has reached a bingo")?;
 
-    println!("{max_score}");
-    fs::write("../output.txt", format!("{max_score}\n")).context("Could not write to output")?;
+    let score;
+
+    if max_flag {
+        score = *bingo_scores
+            .iter()
+            .max()
+            .context("No board has reached a bingo")?;
+    } else {
+        score = *bingo_scores
+            .last()
+            .context("No board has reached a bingo")?;
+    }
+    println!("{score}");
+    fs::write("../output.txt", format!("{score}\n")).context("Could not write to output")?;
 
     Ok(())
 }

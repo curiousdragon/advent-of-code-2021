@@ -8,7 +8,7 @@ fn main() -> Result<()> {
     println!();
 
     let f = fs::read_to_string("../input.txt").expect("Failed to read input");
-    println!("Given input:\n{}\n", f);
+    println!("Given input:\n{f}");
 
     let mut i = f.lines();
 
@@ -97,6 +97,7 @@ fn main() -> Result<()> {
         .context("No board has reached a bingo")?;
 
     println!("{max_score}");
+    fs::write("../output.txt", format!("{max_score}\n")).context("Could not write to output")?;
 
     Ok(())
 }

@@ -2,9 +2,23 @@ use anyhow::Context;
 use anyhow::Ok;
 use anyhow::Result;
 use itertools::Itertools;
-use std::cmp::max;
-use std::cmp::min;
 use std::fs;
+
+struct Vent {
+    start_point: (i32, i32),
+    end_point: (i32, i32),
+}
+
+impl Iterator for Vent {
+    type Item = (i32, i32);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.end_point {
+        } else {
+            None
+        }
+    }
+}
 
 fn main() -> Result<()> {
     println!();
@@ -28,22 +42,25 @@ fn main() -> Result<()> {
                 .context("Could not parse point")?;
             vent.push((start?, end?));
         }
+        // Ensure the first point in the vent is the smaller of the two given endpoints
         vent.sort();
+        // Add to vents
         vents.push(vent);
     }
 
-    vents.sort_by(|a, b| {
-        a.partial_cmp(b)
-            .context("Could not compare vent points")
-            .expect("Could not unwrap vent comparison")
-    });
+    // Sort the vents
+    // vents.sort();
 
     // After sorting
-    if debug {
-        for vent in &vents {
-            println!("{:?}->{:?}", vent.get(0), vent.get(1));
-        }
-    }
+    // if debug {
+    //     for vent in &vents {
+    //         println!(
+    //             "{:?}->{:?}",
+    //             vent.first().expect("Could not get the start of a vent"),
+    //             vent.last().expect("Could not get the end of a vent")
+    //         );
+    //     }
+    // }
 
     fn unwrap_vent(vent: &Vec<(i32, i32)>) -> ((i32, i32), (i32, i32)) {
         let start_point = vent.first().expect("Could not get the start of a vent");
@@ -53,6 +70,21 @@ fn main() -> Result<()> {
 
     let mut seen = vec![];
 
+    for i in 0..vents.len() {
+        let vent = &vents[i];
+        let (start_point, end_point) = unwrap_vent(vent);
+        for j in (i + 1)..vents.len() {
+            let other_vent = &vents[j];
+            let (other_start_point, other_end_point) = unwrap_vent(other_vent);
+
+            if start_point <= other_start_point && other_start_point <= end_point {
+                for point in other_start_point..other_end_point {}
+            } else if other_start_point <= start_point && start_point <= other_end_point {
+            }
+        }
+    }
+
+    /*
     for i in 0..vents.len() {
         let vent = &vents[i];
         let (start_point, end_point) = unwrap_vent(vent);
@@ -178,6 +210,7 @@ fn main() -> Result<()> {
             }
         }
     }
+    */
 
     let points = seen.len();
     println!("Length of seen: {points}");
